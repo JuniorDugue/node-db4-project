@@ -1,37 +1,50 @@
 const express = require('express');
-
 const data = require('./model');
-
 const router = express.Router();
 
+// Returns a list of all recipes in the database /recipe/ 
 router.get('/', (req, res) => {
     data.findRecipe()
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => {
-      res.status(500).json({ message: 'Failed to get recipes' });
-    });
-  });
+        .then(recipes => {
+            res.status(200).json({recipes})
+        })
+        .catch(err => {
+            res.status(500).json({error: 'Could not get the list of recipes'})
+        })
+})
 
-  router.get('/shoppinglist', (req, res) => {
-    data.findShoppinglist()
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => {
-      res.status(500).json({ message: 'Failed to get shopping list' });
-    });
-  });
+  //Returns a list of the quantity and ingredients of a recipe /recipe/recipeIngredients/id
+  router.get('/ingredients/:id', (req, res) => {
+    const shopping_id = req.params.id;
+    data.findShoppinglist(shopping_id)
+        .then(shoppingList => {
+            if(!shoppingList) {
+                res.status(404).json({error: 'The specified ID does not exist.'})
+            } else {
+                res.status(200).json({shoppingList})
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({error: 'Could not get the list of Shopping Ingredients'})
+        })
+})
 
-  router.get('/instruction', (req, res) => {
-    data.findInstruction()
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => {
-      res.status(500).json({ message: 'Failed to get instruction list' });
-    });
-  });
+  //Returns a list of instructions of a recipe /recipe/instructions/id
+  router.get('/instructions/:id', (req, res) => {
+    const instruction_id = req.params.id;
+    data.findInstruction(instruction_id)
+        .then(instructions => {
+            if(!instructions) {
+                res.status(404).json({error: 'The specified ID does not exist.'})
+            } else {
+                res.status(200).json({instructions})
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({error: 'Could not get the list of Instructions'})
+        })
+})   
 
   module.exports = router;
