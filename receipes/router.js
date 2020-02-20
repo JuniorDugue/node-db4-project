@@ -15,8 +15,8 @@ router.get('/', (req, res) => {
 
   //Returns a list of the quantity and ingredients of a recipe /recipe/recipeIngredients/id
   router.get('/ingredients/:id', (req, res) => {
-    const shopping_id = req.params.id;
-    data.findShoppinglist(shopping_id)
+    const id = req.params.id;
+    data.findShoppinglist(id)
         .then(shoppingList => {
             if(!shoppingList) {
                 res.status(404).json({error: 'The specified ID does not exist.'})
@@ -32,8 +32,8 @@ router.get('/', (req, res) => {
 
   //Returns a list of instructions of a recipe /recipe/instructions/id
   router.get('/instructions/:id', (req, res) => {
-    const instruction_id = req.params.id;
-    data.findInstruction(instruction_id)
+    const id = req.params.id;
+    data.findInstruction(id)
         .then(instructions => {
             if(!instructions) {
                 res.status(404).json({error: 'The specified ID does not exist.'})
